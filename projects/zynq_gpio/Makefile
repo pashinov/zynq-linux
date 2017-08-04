@@ -1,4 +1,4 @@
-PROJECT = example
+PROJECT = zynq_gpio
 BACK = ..
 
 all: help
@@ -6,6 +6,7 @@ all: help
 .PHONY: import dts fsbl
 
 import:
+	mkdir -p import
 	cp -rf $(BACK)/$(BACK)/vivado/$(PROJECT)/$(PROJECT).runs/impl_1/zynq_design_wrapper.sysdef import/zynq_design_wrapper.sysdef;\
 	cp -rf $(BACK)/$(BACK)/vivado/$(PROJECT)/$(PROJECT).runs/impl_1/zynq_design_wrapper.bit import/zynq_design_wrapper.bit;
 
@@ -18,7 +19,7 @@ fsbl:
 	cd hw;\
 	hsi -mode batch -quiet -notrace -source $(BACK)/$(BACK)/$(BACK)/scripts/fsbl.hsi.tcl -tclargs $(BACK)/import/zynq_design_wrapper.sysdef $(BACK)/fsbl;
 
-uboot: 
+uboot:
 	cd $(BACK)/$(BACK)/u-boot-xlnx;\
 	make CROSS_COMPILE=arm-xilinx-linux-gnueabi- ARCH=arm;\
 	cp u-boot $(BACK)/projects/$(PROJECT)/output/temp/u-boot.elf;
@@ -42,9 +43,9 @@ image:
 	cd $(BACK)/$(BACK)/qspi-flash;\
 	./qspi-flash $(BACK)/projects/$(PROJECT)/output/images/BOOT.bin 0x000000 $(BACK)/projects/$(PROJECT)/output/images/uImage 0x700000 $(BACK)/projects/$(PROJECT)/output/images/devicetree.dtb 0xB00000 $(BACK)/projects/$(PROJECT)/output/images/uramdisk.image.gz 0xB20000 -o $(BACK)/projects/$(PROJECT)/output/temp/image.bin 0x2000000;\
 	srec_cat $(BACK)/projects/$(PROJECT)/output/temp/image.bin -Binary -o $(BACK)/projects/$(PROJECT)/output/images/image.mcs -Intel;
-	
+
 clean:
-	rm -rf dts fsbl hw output/images/* output/temp/* import/*;
+	rm -rf dts fsbl hw output/images/* output/temp/* import;
 
 help:
 	@echo "Available commands:"
