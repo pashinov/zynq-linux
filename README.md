@@ -53,7 +53,7 @@ zynq-linux
 	sudo apt-get install libncurses5-dev libncursesw5-dev
 ```
 
-**Библиотеки у компоненты для компиляции fsbl:**
+**Библиотеки и компоненты для компиляции fsbl:**
 ```
 	sudo ln -s /usr/bin/make /usr/bin/gmake
 	sudo apt-get install lib32stdc++6
